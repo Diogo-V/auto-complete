@@ -11,7 +11,7 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 
-# AutoComplete configuration
+# AutoComplete configuration and word dict
 words = {}
 autocomplete = autocomplete_factory(content_files={
     'words': {
