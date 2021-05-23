@@ -12,7 +12,8 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 # AutoComplete configuration and word dict
-words = {}
+with open('main.json') as json_file:
+    words = json.load(json_file)
 autocomplete = autocomplete_factory(content_files={
     'words': {
         'filepath': "./words.json",
@@ -26,7 +27,7 @@ def write_dict_to_json(dict):
         json.dump(dict, fp, indent=2)
 
 
-def read_word_file(write_to_json=False):
+def read_word_file_old(write_to_json=False):
     
     with open('./count_1w.txt', 'r') as f:
         file_name_data = f.read()
@@ -43,6 +44,22 @@ def read_word_file(write_to_json=False):
         write_dict_to_json(words)
 
 
+def read_word_file(write_to_json=False):
+    with open('./count_1w.txt', 'r') as f:
+        file_name_data = f.read()
+        file_words = re.findall('[a-zA-Z]+', file_name_data)
+        file_freq = re.findall("[0-9]+", file_name_data)
+
+        # This is our vocabulary
+    file_words = list(file_words)
+
+    for i in range(0, len(file_words)):
+        words[file_words[i]] = int(file_freq[i])
+
+    with open("./main.json", "w") as fp:
+        json.dump(words, fp, indent=2)
+
+
 def find_suggestions(word):
     
     response = []
@@ -53,7 +70,7 @@ def find_suggestions(word):
     # Appends word frequency to a dictionary
     word_and_freq = {}
     for word_list in suggestions:
-        word_and_freq[word_list[0]] = words[word_list[0]][2]
+        word_and_freq[word_list[0]] = words[word_list[0]]
         
     # Sorts dictionary by frequency
     word_and_freq = list(sorted(word_and_freq.items(), key=lambda item: item[1]))[-3:] 
@@ -86,5 +103,4 @@ def get_words():
 
 # Driver code
 if __name__ == '__main__':
-    read_word_file()
     app.run()
