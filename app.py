@@ -12,8 +12,10 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 # AutoComplete configuration and word dict
-with open('main.json') as json_file:
-    words = json.load(json_file)
+# with open('main.json') as json_file:
+#     words = json.load(json_file)
+
+words = {}
 autocomplete = autocomplete_factory(content_files={
     'words': {
         'filepath': "./words.json",
